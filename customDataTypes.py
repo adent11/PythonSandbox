@@ -42,13 +42,13 @@ class ListPriorityQueue():
     def insert(self, value, priority):
         self.items.append((value, priority))
     
-    def popHighest(self):
+    def popMax(self):
         maxPriority = max([self.items[i][1] for i in range(len(self.items))])
         for i in range(len(self.items)):
             if self.items[i][1] == maxPriority:
                 return self.items.pop(i)[0]
     
-    def popLowest(self):
+    def popMin(self):
         minPriority = min([self.items[i][1] for i in range(len(self.items))])
         for i in range(len(self.items)):
             if self.items[i][1] == minPriority:
@@ -84,7 +84,6 @@ class MinHeap():
     def upheap(self, gen, idx):
         parGen = gen - 1
         parIdx = idx//2
-        #self.print()
         if gen != 0 and self.heap[gen][idx][1] < self.heap[parGen][parIdx][1]:
             self.swap(gen, idx, parGen, parIdx)
             self.upheap(parGen, parIdx)
@@ -100,14 +99,11 @@ class MinHeap():
             minCIdx = c1Idx
         else:
             minCIdx = c2Idx
-
+        
         if hasChild:
             if self.heap[cGen][minCIdx][1] < self.heap[gen][idx][1]:
-                #print(f"Parent: {self.heap[gen][idx][1]} swapped with Child: {self.heap[cGen][minCIdx][1]}")
                 self.swap(gen, idx, cGen, minCIdx)
                 self.downheap(cGen, minCIdx)
-        #self.print()
-        
 
     def insert(self, data, priority):
         if self.isEmpty(): # Inserts at root if heap is empty
@@ -118,23 +114,23 @@ class MinHeap():
             self.heap.append([(data, priority)])
         self.upheap(len(self.heap)-1, len(self.heap[len(self.heap)-1])-1) 
     
-    def dequeue(self):
+    def popMin(self):
         if self.isEmpty():
             return None
         if len(self.heap) == 1:
             return self.heap[0].pop()[0]
-        poppedData = self.heap[0][0][0] # The first value (data) of the first node in the first generation (the root)
+        rootData = self.heap[0][0][0] # The first value (data) of the first node in the first generation (the root)
         replacement = self.heap[len(self.heap)-1].pop() # Removes last node in the last generation
         self.heap[0][0] = replacement # Replaces the root with the node removed from the end
         if len(self.heap[len(self.heap)-1]) == 0:
             self.heap.pop() # If the last generation is empty, it gets deleted
         self.downheap(0, 0) # Ensures that the heap remains properly ordered by moving the new root to its correct place
-        return poppedData
+        return rootData
 
     def print(self):
-        for gen, pop in enumerate(self.heap):
-            tempPop = pop[:]
-            while len(tempPop) < 2**gen:
-                tempPop.append(('     '))
-            print(str(tempPop).center(os.get_terminal_size().columns))
+        for genIdx, gen in enumerate(self.heap):
+            tempGen = gen[:]
+            while len(gen) < 2**gen:
+                tempGen.append(('     '))
+            print(str(tempGen).center(os.get_terminal_size().columns))
         print()
