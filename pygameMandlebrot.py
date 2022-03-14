@@ -1,6 +1,6 @@
 import pygame
 
-WIDTH, HEIGHT = 900, 600
+WIDTH, HEIGHT = 1920*4, 1280*4
 
 WIN = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Mandlebrot Set Drawer")
@@ -20,9 +20,9 @@ def mandlebrot(p):
 
 while maxIter < 101:
   print(maxIter)
-  
+  pygame.display.update()
   for x in range(WIDTH):
-    pygame.display.update()
+    print(x)
     for y in range(HEIGHT):
       point = complex(RS + (x / WIDTH) * (RE - RS), IS + (y / HEIGHT) * (IE - IS))
       #print(point)
@@ -36,7 +36,7 @@ while maxIter < 101:
         if event.type == pygame.QUIT:
           pygame.quit()
           exit()
-  #pygame.image.save(WIN, f"MandelbrotPics/{maxIter}iterations{WIDTH}x{HEIGHT}px.jpeg")
+  pygame.image.save(WIN, f"MandelbrotPics/{maxIter}iterations{WIDTH}x{HEIGHT}px.jpeg")
   maxIter = maxIter + 1
 
 while True:
