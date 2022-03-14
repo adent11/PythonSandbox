@@ -11,6 +11,9 @@ class lifeGrid:
     def isAlive(self, x, y):
         return (x, y) in self.curGenCells
     
+    def kill(self, x, y):
+        del self.curGenCells[(x, y)]
+    
     def clear(self):
         self.curGenCells = {}
     

@@ -1,7 +1,7 @@
 import pygame
 from GOLClass import lifeGrid
 
-WIDTH, HEIGHT = 1600, 600
+WIDTH, HEIGHT = 900, 400
 squareSize = 10
 firstSquarePos = (-1, -1)
 WIN = pygame.display.set_mode((WIDTH, HEIGHT))
@@ -88,8 +88,10 @@ while True:
                 nextFrameTime = pygame.time.get_ticks()
             if event.key == pygame.K_0:
                 firstSquarePos = (-1, -1)
+            if event.key == pygame.K_g:
+                grid.generate()
     keys_pressed = pygame.key.get_pressed()  # Gets the keys pressed
-    if pygame.mouse.get_pressed()[0]:
+    if pygame.mouse.get_pressed()[1]:
         mousePos = pygame.mouse.get_pos()
         mousePosDif = tuple((mousePos[i]-lastMousePos[i] for i in range(2)))
         firstSquarePos = tuple(((firstSquarePos[i] + mousePosDif[i]) for i in range(2)))
@@ -97,11 +99,15 @@ while True:
     if keys_pressed[pygame.K_ESCAPE]:  # Quits if the escape key is pressed
         pygame.quit()
         exit()
-    if keys_pressed[pygame.K_i]:
+    if pygame.mouse.get_pressed()[0]:
         mousePos = pygame.mouse.get_pos()
         cell = ((-1*firstSquarePos[0] + mousePos[0])//squareSize, (-1*firstSquarePos[1] + mousePos[1])//squareSize)
         if not grid.isAlive(cell[0], cell[1]):
             grid.addCell(cell[0], cell[1])
-            print(cell)
     if keys_pressed[pygame.K_c]:
         grid.clear()
+    if pygame.mouse.get_pressed()[2]:
+        mousePos = pygame.mouse.get_pos()
+        cell = ((-1*firstSquarePos[0] + mousePos[0])//squareSize, (-1*firstSquarePos[1] + mousePos[1])//squareSize)
+        if grid.isAlive(cell[0], cell[1]):
+            grid.kill(cell[0], cell[1])
