@@ -10,6 +10,7 @@ grid = lifeGrid()
 frameLength = 200
 playing = False
 
+
 def waitFor(t):
     while pygame.time.get_ticks() < t:
         keys_pressed = pygame.key.get_pressed()  # Gets the keys pressed
@@ -21,17 +22,25 @@ def waitFor(t):
                 pygame.quit()
                 exit()
 
-def drawGrid(updateScreen = False):
-    curX, curY = (firstSquarePos[0]%squareSize, firstSquarePos[1]%squareSize)
+
+def drawGrid(updateScreen=False):
+    curX, curY = (firstSquarePos[0] % squareSize,
+                  firstSquarePos[1] % squareSize)
     while curX < WIDTH:
-        pygame.draw.line(WIN, (100, 100, 100), (curX, 0), (curX, HEIGHT), width = 1)
+        pygame.draw.line(WIN, (100, 100, 100), (curX, 0),
+                         (curX, HEIGHT), width=1)
         curX = curX + squareSize
     while curY < HEIGHT:
-        pygame.draw.line(WIN, (100, 100, 100), (0, curY), (WIDTH, curY), width = 1)
+        pygame.draw.line(WIN, (100, 100, 100), (0, curY),
+                         (WIDTH, curY), width=1)
         curY = curY + squareSize
-    pygame.draw.rect(WIN,(255, 0, 0),(firstSquarePos[0]+1,firstSquarePos[1]+1,squareSize-1, squareSize-1))
+    pygame.draw.rect(
+        WIN, (255, 0, 0), (firstSquarePos[0]+1, firstSquarePos[1]+1, squareSize-1, squareSize-1))
+
 
 CELL_COLOR = (0, 0, 0)
+
+
 def drawLiveCells():
     xOffset = firstSquarePos[0] % squareSize
     yOffset = firstSquarePos[1] % squareSize
@@ -44,7 +53,8 @@ def drawLiveCells():
         curCellX = firstCellX
         while col*squareSize < WIDTH:
             if grid.isAlive(curCellX, curCellY):
-                pygame.draw.rect(WIN,CELL_COLOR,(col*squareSize + xOffset, row*squareSize + yOffset,squareSize, squareSize))
+                pygame.draw.rect(WIN, CELL_COLOR, (col*squareSize + xOffset,
+                                 row*squareSize + yOffset, squareSize, squareSize))
             col = col + 1
             curCellX = curCellX + 1
         row = row + 1
@@ -62,7 +72,7 @@ def resizeSquare(newSize):
 
 nextFrameTime = pygame.time.get_ticks() + frameLength
 while True:
-    WIN.fill((255,255,255))
+    WIN.fill((255, 255, 255))
     drawLiveCells()
     drawGrid()
     pygame.display.update()
@@ -94,20 +104,23 @@ while True:
     if pygame.mouse.get_pressed()[1]:
         mousePos = pygame.mouse.get_pos()
         mousePosDif = tuple((mousePos[i]-lastMousePos[i] for i in range(2)))
-        firstSquarePos = tuple(((firstSquarePos[i] + mousePosDif[i]) for i in range(2)))
+        firstSquarePos = tuple(
+            ((firstSquarePos[i] + mousePosDif[i]) for i in range(2)))
         lastMousePos = mousePos
     if keys_pressed[pygame.K_ESCAPE]:  # Quits if the escape key is pressed
         pygame.quit()
         exit()
     if pygame.mouse.get_pressed()[0]:
         mousePos = pygame.mouse.get_pos()
-        cell = ((-1*firstSquarePos[0] + mousePos[0])//squareSize, (-1*firstSquarePos[1] + mousePos[1])//squareSize)
+        cell = ((-1*firstSquarePos[0] + mousePos[0])//squareSize,
+                (-1*firstSquarePos[1] + mousePos[1])//squareSize)
         if not grid.isAlive(cell[0], cell[1]):
             grid.addCell(cell[0], cell[1])
     if keys_pressed[pygame.K_c]:
         grid.clear()
     if pygame.mouse.get_pressed()[2]:
         mousePos = pygame.mouse.get_pos()
-        cell = ((-1*firstSquarePos[0] + mousePos[0])//squareSize, (-1*firstSquarePos[1] + mousePos[1])//squareSize)
+        cell = ((-1*firstSquarePos[0] + mousePos[0])//squareSize,
+                (-1*firstSquarePos[1] + mousePos[1])//squareSize)
         if grid.isAlive(cell[0], cell[1]):
             grid.kill(cell[0], cell[1])
