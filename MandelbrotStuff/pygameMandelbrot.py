@@ -28,7 +28,7 @@ def checkExit():
             exit()
 
 
-def mandlebrot(p):
+def mandelbrot(p):
     z = 0
     n = 0
     while abs(z) <= 2 and n < maxIter:
@@ -72,7 +72,7 @@ def drawMandelbrot():
             point = complex(rS + (x / WIDTH) * (rE - rS),
                             iS + (y / HEIGHT) * (iE - iS))
             # print(point)
-            mP = int(mandlebrot(point))
+            mP = int(mandelbrot(point))
             color = (50 + mP * 205 / maxIter, 50 + mP *
                      205 / maxIter, 255)
             if color == (255, 255, 255):
