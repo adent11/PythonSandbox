@@ -1,7 +1,7 @@
 import pygame
 import math
 
-WIDTH, HEIGHT = 1080, 720
+WIDTH, HEIGHT = 8640, 5760
 
 WIN = pygame.display.set_mode((WIDTH, HEIGHT))
 
@@ -51,15 +51,20 @@ def cplxToPos(p):
 
 
 for x in range(WIDTH):
+    print(x)
     for y in range(HEIGHT):
         point = complex(RS + (x / WIDTH) * (RE - RS),
                         IS + (y / HEIGHT) * (IE - IS))
         # print(point)
-        color = 255 - int(mandlebrot(point) * 255 / maxIter)
-        mandlebrotSurface.set_at((x, y), (color, color, color))
+        mP = int(mandlebrot(point))
+        color = (255 - mP * 255 / maxIter, 255 - mP * 255 / maxIter, 255 - mP * 255 / maxIter)
+        if color == (0, 0, 255):
+          color = (0, 0, 0)
+        mandlebrotSurface.set_at((x, y), color)
         checkExit()
-    WIN.blit(mandlebrotSurface, (0, 0))
-    pygame.display.update()
+WIN.blit(mandlebrotSurface, (0, 0))
+pygame.display.update()
+pygame.image.save(WIN, f"MandelbrotPics/{maxIter}iterations{WIDTH}x{HEIGHT}px.jpeg")
 
 nextFrameTime = pygame.time.get_ticks() + 10
 while True:
