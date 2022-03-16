@@ -1,7 +1,7 @@
 import pygame
 import math
 
-WIDTH, HEIGHT = 720, 480
+WIDTH, HEIGHT = 720*2, 480*2
 
 WIN = pygame.display.set_mode((WIDTH, HEIGHT))
 
@@ -92,6 +92,19 @@ def drawMandelbrot():
         pygame.display.update()
 
 
+def drawPointPath():
+    WIN.blit(mandlebrotSurface, (0, 0))
+    if mX < WIDTH and mY < HEIGHT:
+        point = complex(rS + (mX / WIDTH) * (rE - rS),
+                        iS + (mY / HEIGHT) * (iE - iS))
+        n = 1
+        while n < 11:
+            pygame.draw.line(WIN, (112, 169, 255), cplxToPos(
+                nIters(point, n)), cplxToPos(nIters(point, n + 1)), width=1)
+            n = n + 1
+    pygame.display.update()
+
+
 drawMandelbrot()
 nextFrameTime = pygame.time.get_ticks() + 10
 while True:
@@ -107,18 +120,9 @@ while True:
             if event.key == pygame.K_i:
                 maxIter = int(input("Enter new max iterations: "))
                 drawMandelbrot()
-    
-    if pygame.time.get_ticks() > nextFrameTime:
+    '''if pygame.time.get_ticks() > nextFrameTime:
         nextFrameTime = nextFrameTime + 10
-        WIN.blit(mandlebrotSurface, (0, 0))
-        if mX < WIDTH and mY < HEIGHT:
-            point = complex(rS + (mX / WIDTH) * (rE - rS),
-                            iS + (mY / HEIGHT) * (iE - iS))
-            n = 1
-            while n < 11:
-                pygame.draw.line(WIN, (112, 169, 255), cplxToPos(
-                    nIters(point, n)), cplxToPos(nIters(point, n + 1)), width=1)
-                n = n + 1
-        pygame.display.update()
+        drawPointPath()'''
+    
 
 # Interesting point: -.0789908670791665+0.14658918139999
