@@ -1,6 +1,7 @@
 from PIL import Image, ImageDraw
 
-MAX_ITER = 80
+MAX_ITER = 150
+
 
 def mandelbrot(c):
     z = 0
@@ -9,6 +10,7 @@ def mandelbrot(c):
         z = z*z + c
         n += 1
     return n
+
 
 # Image size (pixels)
 WIDTH = 600
