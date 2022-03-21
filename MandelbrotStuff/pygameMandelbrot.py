@@ -1,7 +1,8 @@
+from traceback import print_tb
 import pygame
 import math
 
-WIDTH, HEIGHT = 720*2, 480*2
+WIDTH, HEIGHT = 1920, 1920
 
 WIN = pygame.display.set_mode((WIDTH, HEIGHT))
 
@@ -12,9 +13,10 @@ clock = pygame.time.Clock()
 pygame.display.set_caption("Mandlebrot Set Drawer")
 WIN.fill((255, 255, 255))
 empty = pygame.Color(0, 0, 0, 0)
-rS, rE = -2, 1
-iS, iE = -1, 1
+rS, rE = -1.5, 1.5
+iS, iE = -1.5, 1.5
 maxIter = 100
+power = 1.5
 
 
 def checkExit():
@@ -27,20 +29,22 @@ def checkExit():
             pygame.quit()
             exit()
 
+
 def printStatus():
     mX, mY = pygame.mouse.get_pos()
     mPosCplx = posToCplx(mX, mY)
-    print(f"maxIters: {maxIter}  rS: {rS}  rE: {rE}  iS: {iS}  iE{iE}  mousePos: {mPosCplx}")
+    print(
+        f"maxIters: {maxIter}  rS: {rS}  rE: {rE}  iS: {iS}  iE{iE}  mousePos: {mPosCplx}")
 
 
 def mandelbrot(p):
     z = 0
     n = 0
     q = (p.real - 1/4) ** 2 + p.imag ** 2
-    if q * (q + (p.real - 1/4)) <= p.imag ** 2 / 4: # Checks if point is in the center cartioid
-        return maxIter
+    """if q * (q + (p.real - 1/4)) <= p.imag ** 2 / 4:  # Checks if point is in the center cartioid
+        return maxIter"""
     while abs(z) <= 2 and n < maxIter:
-        z = z**2 + p
+        z = z**power + p
         n += 1
     return n
 
@@ -75,21 +79,20 @@ def zoomedBounds(cX, cY, zoom):
 
 def drawMandelbrot():
     for x in range(WIDTH):
-        print(x)
         for y in range(HEIGHT):
             point = complex(rS + (x / WIDTH) * (rE - rS),
                             iS + ((HEIGHT - y) / HEIGHT) * (iE - iS))
             # print(point)
             mP = int(mandelbrot(point))
-            color = (255- mP * 255 / maxIter, 255 - mP *
+            color = (255 - mP * 255 / maxIter, 255 - mP *
                      255 / maxIter, 255 - mP *
                      255 / maxIter)
             if color == (255, 255, 255):
                 color = (0, 0, 0)
             mandlebrotSurface.set_at((x, y), color)
             checkExit()
-        WIN.blit(mandlebrotSurface, (0, 0))
-        pygame.display.update()
+    WIN.blit(mandlebrotSurface, (0, 0))
+    pygame.display.update()
 
 
 def drawPointPath():
@@ -105,24 +108,29 @@ def drawPointPath():
     pygame.display.update()
 
 
-drawMandelbrot()
 nextFrameTime = pygame.time.get_ticks() + 10
-while True:
-    checkExit()
-    mX, mY = pygame.mouse.get_pos()
-    #print(f"Mouse X: {mX}  Mouse Y: {mY}")
-    printStatus()
+for intpwer in range(2544, 3001, 1):
+    power = intpwer/1000
+    print(power)
+    drawMandelbrot()
+    pygame.image.save(
+        WIN, f"Ndelbrot/{power}.jpg")
+# checkExit()
+#mX, mY = pygame.mouse.get_pos()
+#print(f"Mouse X: {mX}  Mouse Y: {mY}")
+"""printStatus()
     for event in pygame.event.get():
         if event.type == pygame.MOUSEBUTTONDOWN:
-            rS, rE, iS, iE = zoomedBounds(mX, mY, .1)
+            rS, rE, iS, iE = zoomedBounds(mX, mY, .99)
+            maxIter = maxIter * 1.05
             drawMandelbrot()
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_i:
                 maxIter = int(input("Enter new max iterations: "))
-                drawMandelbrot()
-    '''if pygame.time.get_ticks() > nextFrameTime:
+                drawMandelbrot()"""
+'''if pygame.time.get_ticks() > nextFrameTime:
         nextFrameTime = nextFrameTime + 10
         drawPointPath()'''
-    
+
 
 # Interesting point: -.0789908670791665+0.14658918139999
