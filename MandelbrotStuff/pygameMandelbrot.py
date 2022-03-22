@@ -1,4 +1,5 @@
 from traceback import print_tb
+import multiprocessing as mp
 import time
 import pygame
 import math
@@ -77,10 +78,30 @@ def zoomedBounds(cX, cY, zoom):
     nIE = cplxC.imag + (iE - cplxC.imag) * zoom
     return nRS, nRE, nIS, nIE
 
+def renderPixel(x, y):
+    point = complex(rS + (x / WIDTH) * (rE - rS),
+                    iS + ((HEIGHT - y) / HEIGHT) * (iE - iS))
+    z = 0
+    n = 0
+    """q = (p.real - 1/4) ** 2 + p.imag ** 2"""
+    """if q * (q + (p.real - 1/4)) <= p.imag ** 2 / 4:  # Checks if point is in the center cartioid
+        return maxIter"""
+    while abs(z) <= 2 and n < maxIter:
+        z = z**power + point
+        n += 1
+    n = int(n)
+    color = (255 - n * 255 / maxIter, 255 - n * 255 / maxIter, 255 - n * 255 / maxIter)
+    if color == (255, 255, 255):
+        color = (0, 0, 0)
+    mandlebrotSurface.set_at((x, y), color)
+    checkExit()
+
 
 def drawMandelbrot():
     startTime = time.time()
     for x in range(WIDTH):
+        """pool = mp.Pool()
+        pool.map(renderPixel, [x, range(HEIGHT)])"""
         for y in range(HEIGHT):
             point = complex(rS + (x / WIDTH) * (rE - rS),
                             iS + ((HEIGHT - y) / HEIGHT) * (iE - iS))
@@ -112,7 +133,7 @@ def drawPointPath():
 
 
 nextFrameTime = pygame.time.get_ticks() + 10
-for intpwer in range(2796, 3001, 1):
+for intpwer in range(2947, 3001, 1):
     power = intpwer/1000
     print(power)
     drawMandelbrot()
