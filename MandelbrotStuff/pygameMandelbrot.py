@@ -1,4 +1,5 @@
 from traceback import print_tb
+import time
 import pygame
 import math
 
@@ -78,6 +79,7 @@ def zoomedBounds(cX, cY, zoom):
 
 
 def drawMandelbrot():
+    startTime = time.time()
     for x in range(WIDTH):
         for y in range(HEIGHT):
             point = complex(rS + (x / WIDTH) * (rE - rS),
@@ -93,6 +95,7 @@ def drawMandelbrot():
             checkExit()
     WIN.blit(mandlebrotSurface, (0, 0))
     pygame.display.update()
+    print(f"Rendering took {time.time() - startTime} seconds")
 
 
 def drawPointPath():
@@ -109,7 +112,7 @@ def drawPointPath():
 
 
 nextFrameTime = pygame.time.get_ticks() + 10
-for intpwer in range(2665, 3001, 1):
+for intpwer in range(2796, 3001, 1):
     power = intpwer/1000
     print(power)
     drawMandelbrot()
