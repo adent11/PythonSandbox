@@ -133,7 +133,7 @@ def drawPointPath():
 
 
 nextFrameTime = pygame.time.get_ticks() + 10
-for intpwer in range(2947, 3001, 1):
+for intpwer in range(2976, 3001, 1):
     power = intpwer/1000
     print(power)
     drawMandelbrot()
